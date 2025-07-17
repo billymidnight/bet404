@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Bets</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/evbets.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="{{ url_for('mainmenu') }}" class="back-button">&larr; Back</a>
+            <h1>EV Bets Finder</h1>
+        </div>
+    </header>
+    <main>
+        <section class="filter-section">
+            <form method="POST" action="{{ url_for('ev_finder') }}">
+                <div class="filter-group">
+                    <label for="sportsbook">Filter by Book:</label>
+                    <select name="sportsbook" id="sportsbook">
+                        <option value="">Select Sportsbook</option>
+                        <option value="DraftKings">DraftKings</option>
+                        <option value="FanDuel">FanDuel</option>
+                        <option value="BetMGM">BetMGM</option>
+                        <option value="BetRivers">BetRivers</option>
+                        <option value="BetUS">BetUS</option>
+                        <option value="Bovada">Bovada</option>
+                        <option value="BetOnline.ag">BetOnline</option>
+                        <option value="LowVig.ag">LowVig</option>
+                        <option value="Caesars">Caesars</option>
+                        <option value="allbooks">All Books</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="sport">Filter by Sport:</label>
+                    <select name="sport" id="sport">
+                        <option value="">Select Sport</option>
+                        <option value="basketball_nba">Basketball</option>
+                        <option value="basketball_ncaab">College Basketball</option>
+                        <option value="americanfootball_nfl">Fake Football</option>
+                        <option value="americanfootball_ncaaf">College Fake Football</option>
+                        <option value="icehockey_nhl">Hockey</option>
+                        <option value="baseball_mlb">Baseball</option>
+                        <option value="soccer_epl">Premier League</option>
+                        <option value="soccer_germany_bundesliga">Bundesliga</option>
+                        <option value="La Liga">La Liga</option>
+                        <option value="Serie A">Serie A</option>
+                        <option value="Ligue 1">Ligue 1</option>
+                        <option value="allsports">All Sports</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="live">Screen Live Games:</label>
+                    <select name="live" id="live">
+                        <option value="">Choose</option>
+                        <option value="nolive">Avoid Live Games</option>
+                        <option value="yeslive">Include Live Games</option>
+                    </select>
+                </div>
+                <button type="submit" class="filter-button">Find EV Bets</button>
+            </form>
+        </section>
+        <section class="table-section">
+            <table>
+                <thead>
+                    <tr>
+                        <th>EV</th>
+                        <th>Outcome</th>
+                        <th>Odds</th>
+                        <th>Book</th>
+                        <th>Implied Prob</th>
+                        <th>Avg Implied Prob</th>
+                        <th>Sport</th>
+                        <th>Game</th>
+                        <th>Commence Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bet in ev_bets %}
+                    <tr>
+                        <td>{{ bet.ev }}</td>
+                        <td>{{ bet.outcome }}</td>
+                        <td>{{ bet.outcome_odds }}</td>
+                        <td>{{ bet.book }}</td>
+                        <td>{{ bet.implied_prob | round(3) }}</td>
+                        <td>{{ bet.avg_implied_prob | round(3) }}</td>
+                        <td>{{ bet.sport }}</td>
+                        <td>{{ bet.hometeam }} vs {{ bet.awayteam }}</td>
+                        <td>{{ bet.commence_time }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>

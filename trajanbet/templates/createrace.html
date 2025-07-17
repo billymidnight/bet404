@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Race</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/createrace.css') }}">
+    <script>
+        function generateHorseFields() {
+            let numParticipants = document.getElementById("num_participants").value;
+            let container = document.getElementById("horse_fields");
+            container.innerHTML = "";
+
+            for (let i = 1; i <= numParticipants; i++) {
+                container.innerHTML += `<label>Horse ${i} Name:</label>
+                                        <input type="text" name="horse_${i}" required><br>`;
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='images/horselog.png') }}" alt="Parimutuel Logo" class="logo">
+        <h1>Create a New Race</h1>
+    </header>
+
+    <nav class="ribbon">
+        <a href="{{ url_for('parimutuel') }}">Home</a>
+        <a href="{{ url_for('realmarkets') }}">Real Markets</a>
+        <a href="{{ url_for('races') }}">Races</a>
+        <a href="#">Other Sports</a>
+        <a href="#">Further Reading</a>
+    </nav>
+
+    <main>
+        <!-- FIXED: Added action to submit form to racecreator() -->
+        <form method="POST" action="{{ url_for('racecreator') }}">
+            <label>Race Name:</label>
+            <input type="text" name="race_name" required>
+
+            <label>Race Venue:</label>
+            <input type="text" name="race_venue" required>
+
+            <label>Number of Participants:</label>
+            <input type="number" id="num_participants" name="num_participants" min="2" max="20" required onchange="generateHorseFields()">
+
+            <div id="horse_fields"></div>
+
+            <button type="submit">Create Race</button>
+        </form>
+    </main>
+</body>
+</html>

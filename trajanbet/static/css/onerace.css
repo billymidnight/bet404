@@ -1,0 +1,191 @@
+body {
+    font-family: 'Trebuchet MS', sans-serif;
+    background: url("../images/goldbg.jpg") no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: rgba(34, 34, 34, 0.8);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+.logo {
+    height: 60px;
+    margin-right: 15px;
+}
+
+/* Tables */
+.race-table, .bet-history {
+    width: 90%;
+    margin: auto;
+    border-collapse: collapse;
+    text-align: center;
+    background: white;
+}
+
+th, td {
+    padding: 12px;
+    border: 2px solid black;
+}
+
+/* Popup Styling */
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    width: 350px;
+}
+
+/* Popup Form */
+.popup-content {
+    text-align: center;
+}
+
+/* Small Horse Logo in Form */
+.form-logo {
+    width: 50px;
+    display: block;
+    margin: auto;
+}
+
+/* Inputs */
+input, select {
+    width: 90%;
+    padding: 10px;
+    border: 2px solid gold;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+/* Buttons */
+button {
+    font-size: 1.1em;
+    padding: 10px 20px;
+    border: 2px solid gold;
+    background: transparent;
+    color: gold;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #ffd700, #b8860b);
+    color: black;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Ribbon Menu */
+.ribbon {
+    background: rgba(68, 68, 68, 0.9);
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 1.2em;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    border-bottom: 3px solid gold;
+    position: sticky;
+    top: 80px;
+    z-index: 999;
+}
+
+.ribbon a {
+    color: gold;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.ribbon a:hover {
+    color: white;
+}
+
+.prize-pool-box {
+    width: 50%;
+    margin: 20px auto;
+    padding: 20px;
+    background: rgba(255, 215, 0, 0.9);
+    color: black;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 10px;
+    border: 3px solid #b8860b;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Disclaimer Styling */
+.disclaimer {
+    background: rgba(255, 215, 0, 0.15);
+    color: rgb(255, 255, 255);
+    padding: 15px;
+    border-left: 5px solid gold;
+    margin: 20px auto;
+    text-align: center;
+    font-size: 1.6em;
+    font-style: italic;
+    font-family: 'Courier New', Courier, monospace;
+    max-width: 80%;
+}
+
+/* Footer */
+footer {
+    background: rgba(34, 34, 34, 0.8);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    position: relative; /* Adjusted to sit below content */
+    bottom: 0;
+    width: 100%;
+    border-top: 3px solid gold;
+}
+
+footer p {
+    margin: 0;
+    font-size: 1em;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+h2 {
+    color: gold;
+    text-shadow: 1px 1px 3px black;
+}
+
+/* Countdown Box */
+.countdown-box {
+    width: 25%;
+    margin: 30px auto;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.85);
+    color: gold;
+    font-size: 1.32em;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 10px;
+    border: 3px solid gold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}

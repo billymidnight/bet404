@@ -1,0 +1,97 @@
+/* General Styling */
+body, h1, form, button {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-image: linear-gradient(135deg, #1c1c1c, #4d4d4d);
+    font-family: 'Cinzel', serif;
+    color: #fff;
+}
+
+/* Header */
+header {
+    background: linear-gradient(90deg, #1a1a1a, #333333);
+    padding: 20px 40px;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.back-button {
+    color: gold;
+    text-decoration: none;
+    font-size: 1.2em;
+}
+
+h1 {
+    font-size: 2.5em;
+    color: gold;
+}
+
+/* Search Section */
+.search-section {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.search-bar {
+    padding: 10px;
+    font-size: 1.2em;
+    width: 300px;
+    border-radius: 8px;
+    border: 2px solid gold;
+    background: #2c2c2c;
+    color: white;
+}
+
+.search-button {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    background: gold;
+    color: black;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.search-button:hover {
+    background: #b8860b;
+}
+
+/* Sports Grid */
+.sports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    padding: 20px;
+}
+
+/* Active Sport Item */
+.sport-item {
+    text-decoration: none;
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    transition: 0.3s ease-in-out;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+.sport-item:hover {
+    background: rgba(255, 215, 0, 0.2);
+}
+
+/* Inactive Sport Item */
+.sport-item.inactive {
+    opacity: 0.4;
+    pointer-events: none;
+    background: rgba(100, 100, 100, 0.3);
+    color: #888;
+}

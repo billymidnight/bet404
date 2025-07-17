@@ -1,0 +1,42 @@
+[
+    {
+        "id": "d3c9a7cac608823191f92cbb1b49c6b9",
+        "sport_key": "soccer_uefa_champs_league",
+        "sport_title": "UEFA Champions League",
+        "commence_time": "2025-02-19T20:00:00Z",
+        "completed": true,
+        "home_team": "PSV Eindhoven",
+        "away_team": "Juventus",
+        "scores": [
+            {
+                "name": "PSV Eindhoven",
+                "score": "3"
+            },
+            {
+                "name": "Juventus",
+                "score": "1"
+            }
+        ],
+        "last_update": "2025-02-20T01:04:12Z"
+    },
+    {
+        "id": "324b300556e9195cbb917e1a67135876",
+        "sport_key": "soccer_uefa_champs_league",
+        "sport_title": "UEFA Champions League",
+        "commence_time": "2025-02-19T20:00:00Z",
+        "completed": true,
+        "home_team": "Real Madrid",
+        "away_team": "Manchester City",
+        "scores": [
+            {
+                "name": "Real Madrid",
+                "score": "3"
+            },
+            {
+                "name": "Manchester City",
+                "score": "1"
+            }
+        ],
+        "last_update": "2025-02-20T01:04:12Z"
+    }
+]

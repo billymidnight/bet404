@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parimutuel Betting</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/parimutuel.css') }}">
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='images/horselog.png') }}" alt="Parimutuel Logo" class="logo">
+        <h1>Parimutuel Betting</h1>
+    </header>
+
+    <nav class="ribbon">
+        <a href="{{ url_for('parimutuel') }}">Home</a>
+        <a href="{{ url_for('realmarkets') }}">Real Markets</a>
+        <a href="{{ url_for('races') }}">Races</a>
+        <a href="#">Other Sports</a>
+        <a href="#">Further Reading</a>
+    </nav>
+
+    <main>
+        <div class="slideshow-container">
+            <div class="slideshow">
+                <img src="{{ url_for('static', filename='images/horse1.jpg') }}" class="slide fade">
+                <img src="{{ url_for('static', filename='images/horse2.jpg') }}" class="slide fade">
+                <img src="{{ url_for('static', filename='images/horse3.jpg') }}" class="slide fade">
+                <img src="{{ url_for('static', filename='images/horse4.jpg') }}" class="slide fade">
+                <img src="{{ url_for('static', filename='images/horse5.jpg') }}" class="slide fade">
+                <img src="{{ url_for('static', filename='images/horse5.jpg') }}" class="slide fade">
+                <img src="{{ url_for('static', filename='images/horse6.jpg') }}" class="slide fade">
+                <img src="{{ url_for('static', filename='images/horse10.jpg') }}" class="slide fade">
+                <img src="{{ url_for('static', filename='images/horse8.jpg') }}" class="slide fade">
+                <img src="{{ url_for('static', filename='images/horse9.jpg') }}" class="slide fade">
+                <img src="{{ url_for('static', filename='images/horse11.jpg') }}" class="slide fade">
+                <img src="{{ url_for('static', filename='images/horse7.jpg') }}" class="slide fade">
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let index = 0;
+        function showSlides() {
+            let slides = document.querySelectorAll(".slide");
+            slides.forEach((slide) => slide.style.opacity = "0");
+            slides[index].style.opacity = "1";
+            index = (index + 1) % slides.length;
+            setTimeout(showSlides, 3000);
+        }
+        showSlides();
+    </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+body {
+    font-family: 'Trebuchet MS', sans-serif;
+    background: url("../images/goldbg.jpg") no-repeat center center fixed;
+    background-size: cover;
+    color: #000000; /* Changed from #333 to improve contrast */
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: rgba(34, 34, 34, 0.8);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    height: 60px;
+    margin-right: 15px;
+}
+
+/* Race Results & Bet History Tables */
+.race-results, .bet-history {
+    width: 90%;
+    margin: auto;
+    border-collapse: collapse;
+    text-align: center;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Changed table headers to a lighter gold to improve contrast */
+h2 {
+    color: gold;
+    text-shadow: 1px 1px 3px black;
+}
+
+th, td {
+    padding: 12px;
+    border: 2px solid black;
+}
+
+/* Win and Loss Backgrounds */
+.win {
+    background-color: rgba(0, 200, 0, 0.2);
+    font-weight: bold;
+}
+
+.loss {
+    background-color: rgba(200, 0, 0, 0.2);
+    font-weight: bold;
+}
+
+/* Majestic Styling for Final Standings */
+.race-results td {
+    font-family: 'Garamond', serif;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+/* Trophy emoji for the winner */
+.winner {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: gold;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 1.3em;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(to right, #444, #222);
+    margin-top: 20px;
+}
+
+.ribbon {
+    background: rgba(68, 68, 68, 0.9);
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 1.2em;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    border-bottom: 3px solid gold;
+    position: sticky;
+    top: 80px;
+    z-index: 999;
+}
+
+.ribbon a {
+    color: gold;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.ribbon a:hover {
+    color: white;
+}

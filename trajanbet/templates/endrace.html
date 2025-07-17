@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>End Race - {{ race.racename }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/endrace.css') }}">
+    <script>
+        function updateDropdowns() {
+            let selectedHorses = new Set();
+            let dropdowns = document.querySelectorAll(".horse-dropdown");
+
+            // Collect selected horses
+            dropdowns.forEach(dropdown => {
+                if (dropdown.value) {
+                    selectedHorses.add(dropdown.value);
+                }
+            });
+
+            // Disable options that are already selected
+            dropdowns.forEach(dropdown => {
+                let options = dropdown.querySelectorAll("option");
+                options.forEach(option => {
+                    if (option.value && selectedHorses.has(option.value) && option.value !== dropdown.value) {
+                        option.disabled = true;
+                    } else {
+                        option.disabled = false;
+                    }
+                });
+            });
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='images/horselog.png') }}" alt="Parimutuel Logo" class="logo">
+        <h1>End Race - {{ race.racename }}</h1>
+    </header>
+
+    <nav class="ribbon">
+        <a href="{{ url_for('parimutuel') }}">Home</a>
+        <a href="{{ url_for('realmarkets') }}">Real Markets</a>
+        <a href="{{ url_for('races') }}">Races</a>
+        <a href="#">Other Sports</a>
+        <a href="#">Further Reading</a>
+    </nav>
+
+    <main>
+        <h2>Enter Finishing Positions</h2>
+        <form method="POST" action="{{ url_for('finishrace', race_id=race.raceid) }}">
+            {% for i in range(1, horses|length + 1) %}
+            <label>Position {{ i }}:</label>
+            <select name="position_{{ i }}" class="horse-dropdown" onchange="updateDropdowns()" required>
+                <option value="">Select Horse</option>
+                {% for horse in horses %}
+                <option value="{{ horse.horseid }}">{{ horse.horsename }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            {% endfor %}
+
+            <button type="submit">End Race</button>
+        </form>
+    </main>
+</body>
+</html>

@@ -1,0 +1,120 @@
+body {
+    font-family: 'Trebuchet MS', sans-serif;
+    background: url("../images/goldbg.jpg") no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header */
+header {
+    background: #222;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+.logo {
+    height: 60px;
+    margin-right: 15px;
+}
+
+/* Ribbon Menu */
+.ribbon {
+    background: rgba(68, 68, 68, 0.9);
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 1.2em;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    border-bottom: 3px solid gold;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.ribbon a {
+    color: gold;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.ribbon a:hover {
+    color: white;
+}
+
+/* Toggle Buttons */
+.toggle-buttons {
+    text-align: center;
+    margin: 20px;
+}
+
+.toggle-buttons button {
+    font-size: 1.2em;
+    padding: 10px 20px;
+    border: 2px solid gold;
+    background: transparent;
+    color: gold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 10px;
+}
+
+.toggle-buttons button:hover {
+    background: linear-gradient(135deg, #ffd700, #b8860b);
+    color: black;
+}
+
+/* Race Container */
+.race-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+    justify-content: center;
+    margin: 30px;
+}
+
+/* Delete Button */
+.delete-button {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5em;
+    color: black;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.delete-button:hover {
+    transform: scale(1.2);
+    color: red;
+}
+
+.race-box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border: 2px solid gold;
+    cursor: pointer;
+    transition: 0.3s;
+    position: relative;
+}
+
+.race-box:hover {
+    background: gold;
+    color: black;
+    transform: scale(1.05);
+}
+
+
+.race-box h3 {
+    margin-bottom: 10px;
+}

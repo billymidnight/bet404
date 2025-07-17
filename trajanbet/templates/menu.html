@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trajan Betting Central</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <img src="{{ url_for('static', filename='images/trajan.png') }}" alt="Trajan Logo" class="logo">
+            <h1>Trajan Betting Central</h1>
+            <div class="hamburger-menu">
+                <input type="checkbox" id="menu-toggle">
+                <label for="menu-toggle" class="menu-icon">&#9776;</label>
+                <nav class="dropdown">
+                    <a href="{{ url_for('ev_populate') }}">EV Betting</a>
+                    <a href="{{ url_for('promolanding') }}">Promo Evaluator</a>
+                    <a href="{{ url_for('vig_landing') }}">Vig Calculator</a>
+                    <a href="{{ url_for('aboutpage') }}">About Trajan Betting</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Ribbon Section -->
+    <div class="ribbon">
+        <form action="{{ url_for('askhadrian') }}" method="GET">
+            <button class="hribbon-btn">Hadrian 🤖</button>
+        </form>
+        <form action="{{ url_for('linepopulator') }}" method="GET">
+            <button class="ribbon-btn">Line Populator</button>
+        </form>
+        <form action="{{ url_for('laypopulator') }}" method="POST">
+            <button class="ribbon-btn">Lay Populator</button>
+        </form>
+        <form action="{{ url_for('lineshopping') }}" method="GET">
+            <button class="ribbon-btn">Line Shopping</button>
+        </form>
+        <form action="{{ url_for('parimutuel') }}" method="GET">
+            <button class="ribbon-btna">Parimutuel</button>
+        </form>
+
+    </div>
+
+    <main>
+        <div class="menu-options">
+            <form action="{{ url_for('free_bet_shower') }}" method="GET">
+                <button class="menu-btn">Free Bet Calculator</button>
+            </form>
+            <form action="{{ url_for('ev_finder') }}" method="GET">
+                <button class="menu-btn">Positive EV Betting</button>
+            </form>
+            <form action="{{ url_for('linefinder') }}" method="GET">
+                <button class="menu-btn">Line Finder</button>
+            </form>
+            <form action="{{ url_for('arbfinder') }}" method="GET">
+                <button class="menu-btn">Arbitrage</button>
+            </form>
+            <form action="{{ url_for('aboutpage') }}" method="GET">
+                <button class="menu-btn">About Trajan</button>
+            </form>
+            <form action="{{ url_for('askhadrian') }}" method="GET">
+                <button class="menu-btn hadrian-btn">Hadrian 🤖</button>
+            </form>            
+
+        </div>
+    </main>
+</body>
+</html>

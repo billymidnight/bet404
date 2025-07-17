@@ -1,0 +1,176 @@
+body {
+    font-family: 'Trebuchet MS', sans-serif;
+    background: #f7f7f7;
+    color: #333;
+}
+
+header {
+    background: #222;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.back-button {
+    color: gold;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.popular-sports {
+    background: #444;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 1.1em;
+    border-bottom: 3px solid gold;
+    margin-bottom: 20px;
+}
+
+.popular-sports a {
+    color: gold;
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: bold;
+}
+
+.popular-sports a:hover {
+    text-decoration: underline;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.odds-table {
+    width: 100%;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    overflow-x: auto;
+}
+
+table thead .sticky-header {
+    position: sticky;
+    top: 0;
+    background: gold;
+    z-index: 100;
+}
+
+.sub-header {
+    background: #333;
+    color: white;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    border-spacing: 0;
+    border: 2px solid black;
+}
+
+.bookmaker-header {
+    background: gold;
+    font-size: 1.1em;
+    padding: 10px;
+    border-right: 6px solid black;
+}
+
+.game-row {
+    border-top: 3px solid black;
+    background-color: #f9f9f9;
+    transition: background 0.3s ease, transform 0.1s ease-in-out;
+}
+
+/* Alternate row background */
+.game-row:nth-child(even) {
+    background-color: #e6e6e6;
+}
+
+/* Game info (clickable) */
+.game-info {
+    border-right: 3px solid black;
+    cursor: pointer;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect to indicate clickability */
+.game-info:hover {
+    background: rgba(255, 215, 0, 0.3);
+    box-shadow: 0px 0px 10px rgba(255, 215, 0, 0.5);
+}
+
+/* Click effect (slight shrink) */
+.game-info:active {
+    transform: scale(0.97);
+}
+
+/* Odd Cells Styling */
+.odd-cell {
+    padding: 12px;
+    font-weight: bold;
+    font-size: 1.2em;
+    transition: background 0.3s ease;
+    border-left: 2px solid #666;
+}
+
+.home {
+    background: rgba(255, 215, 0, 0.2);
+}
+
+.away {
+    background: rgba(173, 216, 230, 0.2);
+}
+
+.draw {
+    background: rgba(200, 200, 200, 0.3);
+}
+
+.odd-cell:hover {
+    background: rgba(0, 128, 0, 0.3);
+    cursor: pointer;
+}
+
+.bookmaker-header,
+th[colspan] {
+    border-right: 6px solid black;
+}
+
+.odd-cell:nth-child(3n + 1) {
+    border-right: 6px solid black;
+}
+
+.odd-cell {
+    border-left: 2px solid #666;
+    border-bottom: 2px solid #bbb;
+    border-top: 2px solid #bbb;
+}
+
+th {
+    padding: 12px;
+    border-bottom: 3px solid black;
+}
+
+td {
+    padding: 10px;
+    border: 2px solid black;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .popular-sports {
+        font-size: 0.9em;
+    }
+
+    .bookmaker-header {
+        font-size: 0.9em;
+    }
+
+    .odd-cell {
+        font-size: 1em;
+    }
+}

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ race.racename }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/onerace.css') }}">
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='images/horselog.png') }}" alt="Parimutuel Logo" class="logo">
+        <h1>{{ race.racename }} - {{ race.racevenue }}</h1>
+    </header>
+
+    <nav class="ribbon">
+        <a href="{{ url_for('parimutuel') }}">Home</a>
+        <a href="{{ url_for('realmarkets') }}">Real Markets</a>
+        <a href="{{ url_for('races') }}">Races</a>
+        <a href="#">Other Sports</a>
+        <a href="#">Further Reading</a>
+    </nav>
+
+    <main>
+        <div class="prize-pool-box">
+            Total Prize Pool: ${{ total_pool }}
+        </div>
+
+        <table class="race-table">
+            <thead>
+                <tr>
+                    <th>Horse</th>
+                    {% if realorcustom == "real" %}
+                    <th>Bookie Probabilities</th>
+                    {% endif %}
+                    <th>Total Bets</th>
+                    <th>Implied Odds</th>     
+                    <th>Place Bet</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for horse in horses %}
+                <tr>
+                    <td>{{ horse.horsename }}</td>
+                    {% if realorcustom == "real" %}
+                    <td>{{ bookie_odds[loop.index0] }}%</td>
+                    {% endif %}
+                    <td>${{ total_bets[horse.horsename] }}</td>
+                    <td>{{ implied_odds[horse.horsename] }}</td>
+                    <td>
+                        <button onclick="openBetPopup('{{ horse.horseid }}', '{{ horse.horsename }}')">Place Bet</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+                <!-- Countdown Box -->
+        {% if realorcustom == "real" %}
+        <div class="countdown-box">
+            <h2>Countdown to Game</h2>
+            <p id="countdown-timer">Loading...</p>
+        </div>
+
+        <script>
+            function startCountdown(targetTime) {
+                let countDownDate = new Date(targetTime).getTime();
+
+                let x = setInterval(function() {
+                    let now = new Date().getTime();
+                    let distance = countDownDate - now;
+
+                    if (distance < 0) {
+                        document.getElementById("countdown-timer").innerHTML = "Event Started";
+                        clearInterval(x);
+                        return;
+                    }
+
+                    let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    document.getElementById("countdown-timer").innerHTML =
+                        days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+                }, 1000);
+            }
+
+            startCountdown("{{ commence_time_js }}");
+        </script>
+        {% endif %}
+
+
+        <!-- Bet History Table -->
+        <h2>Bet History</h2>
+        <table class="bet-history">
+            <thead>
+                <tr>
+                    <th>Bettor</th>
+                    <th>Horse</th>
+                    <th>Amount</th>
+                    <th>Time Placed</th>
+                    <th>Potential Winnings</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bet in bet_history %}
+                <tr>
+                    <td>{{ bet.bettorname }}</td>
+                    <td>{{ bet.horsename }}</td>
+                    <td>${{ bet.betamount }}</td>
+                    <td>{{ bet.time_placed }}</td>
+                    <td>${{ bet.winnings }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if realorcustom != "real" %}
+        <div class="prize-pool-box">
+            <a href="{{ url_for('endrace', race_id=race.raceid) }}">End Race</a>
+        </div>
+        {% endif %}
+
+        {% if realorcustom == "real" %}
+        <footer>
+            <p><strong>Disclaimer:</strong> The bookmaker odds presented are based on aggregated averages from leading European, British, and American books recorded at the time of event creation. These odds may not represent current market prices.</p>
+        </footer>
+        {% endif %}
+
+    </main>
+
+    <!-- Popup Form for Placing Bets -->
+    <div id="bet-popup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closeBetPopup()">&times;</span>
+            <img src="{{ url_for('static', filename='images/horselog.png') }}" alt="Horse Logo" class="form-logo">
+            <h2>Place a Bet</h2>
+            <form method="POST" action="{{ url_for('newbet', race_id=race.raceid) }}">
+                <label>Bettor Name:</label>
+                <input type="text" name="bettorname" required>
+
+                <label>Pick Horse:</label>
+                <select name="horseid" id="bet-horse">
+                    {% for horse in horses %}
+                    <option value="{{ horse.horseid }}">{{ horse.horsename }}</option>
+                    {% endfor %}
+                </select>
+
+                <label>Bet Amount ($):</label>
+                <input type="number" step="0.01" name="betamount" required>
+
+                <button type="submit">Place Bet</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openBetPopup(horseId, horseName) {
+            document.getElementById("bet-popup").style.display = "block";
+            let dropdown = document.getElementById("bet-horse");
+            dropdown.value = horseId;
+        }
+
+        function closeBetPopup() {
+            document.getElementById("bet-popup").style.display = "none";
+        }
+    </script>
+</body>
+</html>

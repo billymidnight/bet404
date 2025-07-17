@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ game }} - EV Betting</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/eventev.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="{{ url_for('eventshopping', sport_key=sport) }}" class="back-button">&larr; Back</a>
+            <h1>{{ game }} - EV Betting</h1>
+        </div>
+    </header>
+
+    <main>
+        <section class="ev-section">
+            <h2>Highest EV Odds</h2>
+            <div class="ev-box">
+                {% for market, details in highest_ev_details.items() %}
+                <p><strong>{{ market | upper }}</strong> - {{ details.team }} at {{ details.odds }} ({{ details.bookmaker }}) - EV: <span class="ev-highlight">{{ details.ev }}</span></p>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="ev-markets">
+            <h2>All EVs by Market</h2>
+
+            {% for market, ev_list in ev_results.items() %}
+            <h3>{{ market | upper }}</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Bookmaker</th>
+                        <th>Team</th>
+                        <th>Odds</th>
+                        <th>EV</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ev in ev_list %}
+                    <tr>
+                        <td>{{ ev.bookmaker }}</td>
+                        <td>{{ ev.team }}</td>
+                        <td>{{ ev.odds }}</td>
+                        <td class="{% if ev.ev > 0 %}positive{% else %}negative{% endif %}">{{ ev.ev }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endfor %}
+        </section>
+    </main>
+</body>
+</html>

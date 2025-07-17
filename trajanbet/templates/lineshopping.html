@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line Shopping</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/lineshopping.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="{{ url_for('mainmenu') }}" class="back-button">&larr; Back</a>
+            <h1>Line Shopping</h1>
+        </div>
+    </header>
+    <main>
+        <section class="search-section">
+            <form method="POST" action="{{ url_for('lineshopping') }}">
+                <input type="text" name="searchkey" placeholder="Search for League" class="search-bar">
+                <button type="submit" class="search-button">Search</button>
+            </form>
+        </section>
+        <section class="sports-table">
+            <div class="sports-grid">
+                {% for sport in sports %}
+                <a href="{{ url_for('eventshopping', sport_key=sport['key']) }}" class="sport-item {% if not sport.active %}inactive{% endif %}">
+                    <h2>{{ sport.title }}</h2>
+                    <p>{{ sport.description }}</p>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+</body>
+</html>

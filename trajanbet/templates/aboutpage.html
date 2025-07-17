@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About Trajan Betting Central</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/aboutpage.css') }}">
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('mainmenu') }}" class="back-button">← Back to Home</a>
+        <h1>About Trajan Betting Central</h1>
+        <img src="{{ url_for('static', filename='images/trajan.png') }}" alt="Trajan" class="logo">
+    </header>
+    
+
+    <nav class="side-nav">
+        <a href="#matched">Matched Betting</a>
+        <a href="#arbitrage">Arbitrage</a>
+        <a href="#positives">Positive EV Betting</a>
+        <a href="#novig">No-Vig Calculator</a>
+        <a href="#lineshop">Line Shopping</a>
+        <a href="#parimutuel">Parimutuel</a>
+    </nav>
+
+    <main>
+        <section>
+            <h2>Overview</h2>
+            <p>
+                Named after Rome’s greatest emperor, <strong>Trajan Betting Central</strong> offers compelling services in the sports betting ecosystem. 
+                Bookmaker-driven data is fetched from low-latency APIs to cover American, British, European and Australian markets across 80+ professional sporting leagues. 
+                Apart from its statistical tools, TBC also houses the 
+                <a href="{{ url_for('parimutuel') }}" style="color: gold; text-decoration: underline;">parimutuel</a> software 
+                available for both custom and real-world markets. 
+                <a href="{{ url_for('parimutuel') }}" style="color: gold; text-decoration: underline;">Parimutuel</a> is still in its prototypical stage, 
+                with multi-market availability per game and private-game server under way.
+            </p>
+        </section>
+        
+
+        <section id="matched">
+            <h2>Matched Betting</h2>
+        
+            <h3>Free Bet Calculator</h3>
+            <p>
+                The shrine that holds the formula to matched betting. Calculates the hedge value of a price-pair for a binary fully-covered market. Further calculates the hedge size based on Bonus Bet amount provided by user. Optionally include line name and book-pair as inputs. This calculator is only applicable to bonuses with a 1x play-through requirement where stake is not returned upon winning i.e. if decimal odds for the underdog line is b, then winning a bet of size x guarantees a profit of only bx − x or x(b − 1).
+            </p>
+            <p>
+                Given underdog odds u, favourite odds f, and bonus bet size x, the hedge bet size y is calculated as follows:<br><br>
+                <span style="display: block; font-size: 1.2em; font-family: 'Courier New', monospace;">
+                    (100 / −f) &times; y = (u / 100) &times; x − y
+                </span>
+                <span style="display: block; font-size: 1.2em; font-family: 'Courier New', monospace; margin-top: 10px;">
+                    &there4; y = <span style="font-size: 1.1em;">( (u / 100) &times; x ) / ( (100 / −f) + 1 )</span>
+                </span>
+            </p>
+            <p>
+                <strong>Note:</strong> all odds are in American format.<br>
+                To calculate profit, compute either LHS or RHS after solving for y. The hedge value is then profit divided by x (free bet size). The hedge value is the most critical metric indicative of long-term success in matched betting, as it reflects what percentage of the bonus bet can be converted into withdrawable cash risk-free regardless of the sporting outcome.
+            </p>
+            <p>
+                <strong>User caution:</strong> incorrect hedge values may be returned if price points for non-binary or partially covered markets are entered; for e.g. home and away moneyline for a UEFA Champions League game.
+            </p>
+        
+            <h3>Line Finder</h3>
+            <p>
+                Parses through several thousand games worth of data and renders price-pairs sorted by hedge value. The <a href="{{ url_for('linefinder') }}" style="color: gold; text-decoration: underline;">Line Finder</a> currently parses moneyline, spreads, totals and lays with player props and other team props under way. Generally guaranteed to find hedge values north of 0.7 in American markets and north of 0.73 in British markets. Results can be filtered by sport or book. Book refers to the one laying the underdog price i.e. the one offering a bonus. Historically, best lines have existed in NCAAB, NBA and NHL, though this is predominantly for moneyline markets.
+            </p>
+            <p>
+                Promo-converting on a live game is as lucrative as it is dangerous. While there may exist mouth-watering discrepancies amidst books when the lines move mid-game, offering hedge values as good as 1.0+, these lines are notorious for being locked and unlocked with high frequency. Mis-timing the bets can make for undesirable swings or completely lost opportunities to hedge. Further, live games also tend to on-average hold higher bookmaker overrounds, reducing the long-term attraction of finding high-value picks. For these reasons, there is the option to turn off live games from search results in Line Finder.
+            </p>
+            <p>
+                Lay lines can be commonly found, particularly with British and European betting exchanges including but not limited to Smarkets, Betfair and Matchbook. Courtesy of narrow bid-ask spreads at betting exchanges, these lines are often featured in the top-n hedge values. Unlike other markets, the lay lines are hedged on the exact same outcome as its counterpart “back”. Lay lines are the only market that don’t mandate binary fully-covered markets for matched betting. Option to lay at betting exchanges also improves the probability of spotting arbitrage opportunities (see below).
+            </p>
+            <p>
+                <strong>General intuition:</strong> As a rule of thumb, lines far from evens tend to do well, as this allows for greater deviation across books. This reiterates why featured spreads and featured totals don’t tend to score high hedge values, because these lines are priced around evens (+100). For the same reason, MLB moneyline markets tend to exhibit poor HV. For example, a −110, −110 featured O/U line offers an HV of 0.43 whereas a +260, −300 NCAAB ML line offers an HV of 0.65. Trivially, lower implied probability on both sides of the bidirectional market helps for better hedge value. Meaning, a +285, −315 is better than a +260, −315 but worse than a +285, −300 line. Converting these to decimal odds solidifies the intuition further: 3.85, 1.32 vs. 3.6, 1.32 vs. 3.85, 1.34. It’s preferred to have the underdog odds as far away from evens as possible, and having the favourite odds as close to evens as possible. Below is a graph to visualize:
+            </p>
+            <img src="{{ url_for('static', filename='images/graph1.png') }}" alt="Hedge Value Surface Graph" class="graph-img">
+        </section>
+        
+        
+
+        <section id="arbitrage">
+            <h2>Arbitrage</h2>
+            <p>
+                In the unlikely event that there exists a price pair (American odds) <em>u</em>, <em>f</em>, such that |<em>u</em>| &gt; |<em>f</em>|, there is a risk-free arbitrage opportunity. Arbitrage margins are generally thin ranging from 1 to 4 percent typically with ultra-rare occasions offering better margins on regular markets. Akin to promo-hedging, arbitrage needs fully-covered markets. While binary markets simplify both the math and logistics, any <em>n</em>-way arbitrage can be performed in theory so long as the <em>n</em> ways exhaust the universal event space for said market. Arbing also mandates heavy capital to guarantee small returns, for example a $2950 combined wager total may guarantee $31.5.
+            </p>
+            <p>
+                TBC locates  <a href="{{ url_for('arbfinder') }}" style="color: gold; text-decoration: underline;">arbitrage lines</a> through low-latency parsing and flagging anytime the combined implied probability is lower than 1 i.e. should the following formula be satisfied:
+            </p>
+            <div style="font-family: 'Courier New', monospace; font-size: 1.2em; margin: 20px 0; text-align: center;">
+                &#8721;<sub>i=1</sub><sup>n</sup> (1 / <em>b<sub>i</sub></em>) &lt; 1.0
+            </div>
+            <p>
+                where <em>n</em> is the number of disjoint outcomes that fully cover this market, and <em>b<sub>i</sub></em> is the price for each <em>i<sup>th</sup></em> outcome in decimal odds.
+            </p>
+            <p>
+                For such an opportunity, the hedge on a $100 underdog wager is:
+            </p>
+            <div style="font-family: 'Courier New', monospace; font-size: 1.2em; margin: 20px 0; text-align: center;">
+                <em>y</em> = (<em>u</em> + 100) / (100 / (−<em>f</em>) + 1)
+            </div>
+            <p>
+                Note that TBC will never locate arb pairs with both lines from the same book (regardless of whether they exist).
+            </p>
+            <p>
+                The presence of greater arb margins is significantly improved by using the <strong>Lay Populator</strong> trigger. This trigger repopulates the TBC database with lay-lines from betting exchanges significantly increasing the likelihood of spotting arb-lines both exchange-to-exchange and exchange-to-book. Consider an O/U on Second Half Corners in a Bundesliga game priced on average across US books at +165, -191. With narrow bid-ask spreads at exchanges, it’s possible for Smarkets to offer the Over at +177 to back. This consequently means that the Over’s lay will be ~+181. Suddenly it doesn’t seem impossible for a US operator balancing its books leading to kick-off offering a -175 for the under or perhaps a +182 on the over. Extremely liquid markets on exchanges can frequently find ~3-4% arb margins across several US sportsbooks.
+            </p>
+            <p>
+                <strong>DISCLAIMER:</strong> TBC doesn’t separately factor in juice for exchanges that deduct vig upon winnings. TBC also doesn't confirm sufficient liquidity on an exchange's line prior to posting lays.
+            </p>
+        </section>
+
+        <section id="ev">
+            <h2>Positive EV Betting</h2>
+            <p>
+                Positive EV betting in the long run will yield profits so long as sufficient volume is covered by the bettor to de-escalate short-term variance. If the true expected value of your average wager is greater than 0, the Law of Large Numbers mandates that a net profit is secured as <em>N</em> approaches infinity (where <em>N</em> is the number of bets). If the sizing for all <em>N</em> wagers is factored in using the Kelly Criterion with a regular “1” multiplier, these wagers should accumulate in net winnings very close to the precise expectation.
+            </p>
+            <p>
+                Expected value for a wager is calculated based on a probability-weighted sum of winning and losing:
+            </p>
+            <div style="font-family: 'Courier New', monospace; font-size: 1.2em; margin: 20px 0; text-align: center;">
+                <em>EV<sub>i</sub></em> = <em>p<sub>i</sub></em> × <em>b<sub>i</sub></em> − (1 − <em>p<sub>i</sub></em>)
+            </div>
+            <p>
+                where <em>b<sub>i</sub></em> is the decimal odds for bet <em>i</em> and <em>p<sub>i</sub></em> is the vig-free average implied odds taken across at least 20 bookmakers. See more on vig-free odds below.
+            </p>
+            <p>
+                TBC’s odds-parser renders +EV picks ordered from highest to lowest EV, across custom-filtered books. Option to include or exclude lays in these results can be activated. Live games’ EV+ lines may not update at uniform latency across all books; this is contingent on the API’s docu-parsing, which is subject to fluctuation. Akin to the Line Finder, options to filter by book and sport exist.
+            </p>
+            <p>
+                For game-specific EV analysis, see below for Line Shopping.
+            </p>
+            <p>
+                Markets historically known to provide consistent high EV picks include NCAAB moneyline, EPL O/U corners, EPL O/U second half goals, Bundesliga O/U second half goals, Serie A O/U second half goals, NFL alt. spreads and NBA player props.
+            </p>
+            <p>
+                Bettors must be aware that +EV betting has no short term guarantees of yield unlike matched betting and arbitrage and is only healthy when performed consistently and when used in conjunction with the Kelly Criterion. KC targets maximization of long term geometric bankroll growth:
+            </p>
+            <div style="font-family: 'Courier New', monospace; font-size: 1.2em; margin: 20px 0; text-align: center;">
+                <em>f<sup>*</sup></em> = <em>p</em> − <em>q</em> / <em>b</em>
+            </div>
+            <p>
+                where <em>p</em> is the theoretical probability of a win, <em>q = 1 – p</em>, and <em>b</em> is the wager’s decimal odds. <em>f<sup>*</sup></em> refers to the fraction of one’s disposable bankroll that he must commit to this specific wager. KC only applies to binary outcomes, so “Draw No Bet” markets and some Asian lines do not apply.
+            </p>
+        </section>
+        
+        <section id="lineshop">
+            <h2>Line Shopping</h2>
+            <p>
+                TBC offers a comprehensive suite of Line-Shopping for upcoming games and sporting events across 80+ global leagues. Default settings display moneyline odds for eight major US bookmakers {Fanduel, Draftkings, BetMGM, BetRivers, BetOnline.Ag, ESPNBET, Bovada and LowVig.Ag}. Alter settings to include further US books as well as British, European and Australian books.
+            </p>
+            <p>
+                Line Shopping is auto-update upon page refresh unlike matched betting, arbitrage and EV features. TBC’s LS also facilitates a microscopic game view alongside odds and lines comparison between books and EV picks for moneyline, featured spreads and totals markets.
+            </p>
+        </section>
+        
+        <section id="novig">
+            <h2>No-Vig Calculator</h2>
+            <p>
+                Bookmaker overround and equivalently vigorish is the bread and butter of the multibillion-dollar sports betting industry. For a binary fully-covered market <em>m</em> consisting of events <em>α</em> and <em>β</em>, whose book decimal odds are <em>b<sub>α</sub></em> and <em>b<sub>β</sub></em>, the complete “book” <strong>B<sub>m</sub></strong> is:
+            </p>
+            <div style="font-family: 'Courier New', monospace; font-size: 1.2em; margin: 20px 0; text-align: center;">
+                <strong>B<sub>m</sub></strong> = 1 / <em>b<sub>α</sub></em> + 1 / <em>b<sub>β</sub></em>
+            </div>
+            <p>
+                Equivalently, for a fully-covered market <em>m</em> with <em>n</em> disjoint outcomes:
+            </p>
+            <div style="font-family: 'Courier New', monospace; font-size: 1.2em; margin: 20px 0; text-align: center;">
+                <strong>B<sub>m</sub></strong> = &#8721;<sub>i=1</sub><sup>n</sup> (1 / <em>b<sub>i</sub></em>)
+            </div>
+            <p>
+                For such a book, the overround <strong>Ω</strong> is simply <strong>B<sub>m</sub></strong> − 1. Recall that if <strong>B<sub>m</sub></strong> is lesser than 1, there is arbitrage potential since a negative overround is guaranteed profits for the bettor given the zero-sum nature of betting and life in general.
+            </p>
+            <p>
+                The vigourish <strong>v</strong> is then <strong>Ω / B<sub>m</sub></strong>.
+            </p>
+            <p>
+                TBC’s No-Vig Calculator identifies the overround and vigourish for a vig-incorporated price-pair. Generally advised to use this calculator when investigating pairs from the same book. The NVC will eliminate the vig, and provide the vig-free decimal odds of events by performing:
+            </p>
+            <div style="font-family: 'Courier New', monospace; font-size: 1.2em; margin: 20px 0; text-align: center;">
+                <em>bvf<sub>j</sub></em> = [ (1 / <em>b<sub>j</sub></em>) / &#8721;<sub>i ≠ j</sub><sup>n</sup> (1 / <em>b<sub>i</sub></em>) ]<sup>−1</sup>
+            </div>
+            <p>
+                where <em>bvf<sub>j</sub></em> is the vig-free decimal odds for outcome <em>j</em> in an <em>n</em>-way market. The exponentiation to negative one re-converts probability to decimal odds. For example, a 165, -197 vig-incorporated line has a 4.07% overround and its corresponding vig-free line is +175.7, -175.7. Notice that a vig-free market will always have its book <strong>B<sub>m</sub></strong> total to 1.00.
+            </p>
+        </section>
+
+        <section id="parimutuel">
+            <h2>Parimutuel 🐎</h2>
+            <p>
+                TBC’s gold-standard feature, the Parimutuel software, aims to facilitate man-to-man betting eliminating the bookmaker’s role as the sole <em>layeur</em>. It attempts to answer the question: Why bet against juiced up lines set by the powerful Monte Carlo simulations of billion-dollar books when you can bet against the masses? Or more so, against your peers.
+            </p>
+            <p>
+                Parimutuel betting enables bettors to wager against other bettors instead of the “house”, by pooling together bets and calculating odds dynamically based on the bet-composition of the pool. Rather than having a bookmaker dictate the price of an event, sporting or otherwise, the combined public belief in such an event captured mathematically will set the price.
+            </p>
+            <p>
+                Parimutuel pooling has been used historically for horse racing ever since 1867, when Frenchman <a href="https://en.wikipedia.org/wiki/Joseph_Oller" target="_blank" style="color: gold;">Joseph Oller</a> introduced this method to Parisien race tracks. Systems called automatic totalisators were engineered to handle the rapid crunching of odds as betting volumes began to grow under the parimutuel ecosystem. TBC’s python scripts mimic a totalisator for its dynamic recalculation of odds based on new wagers.
+            </p>
+        
+            <h3>Custom Markets</h3>
+            <p>
+                Users can create their own parimutuel markets, though these “races” can refer to any game, event or circumstance that can clearly differentiate between at least two eventual outcomes. Custom names and venues can be input, and an <em>N</em>-way “horse” lineup is named before the race is officially added to TBC’s database.
+            </p>
+            <p>
+                Once a race has been successfully created, it can be found under “Active Races” in the “View All Races” page. On the race page, all horses alongside their total “Win” bets and implied probability are shown in the main table. Following the pool is a bet-history table displaying bettor name, horse picked, bet size and time of bet alongside potential winnings (stake excluded) based on current pool’s parimutuel odds.
+            </p>
+            <p>
+                Users can click on any of the <em>N</em> horses to place a “Win” wager, automatically updating the total pool size as well as the implied odds across all horses. Should an un-wagered horse finish first, all bets are settled as pushes.
+            </p>
+            <p>
+                Races can be concluded either by simulation or user-entered results. Races will be simulated with “Win” probabilities taken from parimutuel odds. Features for multi-user login and fund redistribution and resettlement upon market completion are underway, alongside markets for show and place bets.
+            </p>
+        
+            <h3>Real Markets</h3>
+            <p>
+                For any game offered by a bookmaker registered with Odds-API, a parimutuel market can be created whose settlements will follow outcomes of the game concerned. Currently, moneyline, featured spread and featured total on each game is offered. Users can navigate to the competition, then the specific game and then the specific market to create a real race and add it to TBC’s database.
+            </p>
+            <p>
+                Obviously, no horse selection is enabled for real markets, as the wagerable outcomes are decided by nature of the market. Consider an upcoming Serie A game between Juventus and Udinese. The moneyline race will allow parimutuel bettors to place on “Juventus”, “Draw” and “Udinese”. Bookmaker average odds are enlisted on these tables, however the payout on parimutuel bets is still calculated based on totalisator math.
+            </p>
+            <p>
+                Consider a parimutuel market with <em>n</em> outcomes and a bettor <em>j</em>’s wager on outcome <em>a</em>. His payout upon winning is then:
+            </p>
+            <div style="font-family: 'Courier New', monospace; font-size: 1.2em; margin: 20px 0; text-align: center;">
+                <em>p<sub>j</sub></em> = <em>x<sub>j</sub></em> + (1 − <em>x<sub>j</sub></em> / &#8721;<sub>i=1</sub><sup>k<sub>a</sub></sup> <em>x<sub>i</sub></em>) × <em>P</em>
+            </div>
+            <p>
+                where <em>P</em> is the dollar value of the total prize pool at kick-off, <em>k<sub>a</sub></em> is the number of wagers on outcome <em>a</em>, <em>x<sub>i</sub></em> is the bet size bettor <em>i</em> has committed to outcome <em>k</em>, and <em>p<sub>j</sub></em> is the potential payout with stake. In bookmaking terms, the formula provides the product of decimal odds and wager size. Real markets are settled after the concerning game concludes.
+            </p>
+        
+            <h3>Upcoming Updates</h3>
+            <p>
+                Inclusion of “First Goal Scorer”, an array of O/U markets for team points, team homeruns, goals, corners, yellow cards and shots on target, “First Manager to be Sacked” from top 5 European leagues.
+            </p>
+            <p>
+                Private game rooms to enhance the peer-to-peer betting experience are underway. This allows users to create a private room, encoded with a 6-digit PIN and share the room with friends to create their own markets. This allows for fascinating swings and deviations in major lines from bookmaker-set boring ones. Upon product release, the public rooms will be divided by bet-size ranges anyhow, creating interesting insight for line movement and mass-pricing across various economic levels.
+            </p>
+        </section>
+        
+        
+        
+    </main>
+</body>
+</html>

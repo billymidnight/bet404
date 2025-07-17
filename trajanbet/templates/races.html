@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Races</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/races.css') }}">
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='images/horselog.png') }}" alt="Parimutuel Logo" class="logo">
+        <h1>Parimutuel Betting</h1>
+    </header>
+
+    <nav class="ribbon">
+        <a href="{{ url_for('parimutuel') }}">Home</a>
+        <a href="{{ url_for('realmarkets') }}">Real Markets</a>
+        <a href="{{ url_for('races') }}">Races</a>
+        <a href="#">Other Sports</a>
+        <a href="#">Further Reading</a>
+    </nav>
+
+    <main>
+        <!-- FIXED: Corrected onclick to avoid nested single quotes -->
+        <button onclick="window.location.href='{{ url_for('createrace') }}';">Create New Race</button>
+        <button onclick="window.location.href='{{ url_for('raceviewer') }}';">View Current Races</button>
+        <button class="settle-button" onclick="window.location.href='{{ url_for('checksettles') }}';">Settle Completed Races</button>
+    </main>
+</body>
+</html>

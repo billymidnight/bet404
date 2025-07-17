@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Market</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/createmarket.css') }}">
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='images/horselog.png') }}" alt="Parimutuel Logo" class="logo">
+        <h1>Create Pool - {{ home_team }} vs {{ away_team }}</h1>
+    </header>
+
+    <nav class="ribbon">
+        <a href="{{ url_for('parimutuel') }}">Home</a>
+        <a href="{{ url_for('realmarkets') }}">Real Markets</a>
+        <a href="{{ url_for('races') }}">Races</a>
+        <a href="#">Other Sports</a>
+        <a href="#">Further Reading</a>
+    </nav>
+
+    <!-- ✅ BACK BUTTON TO GO BACK TO realgame.html -->
+    <section class="back-section">
+        <a href="{{ url_for('realgame', sport_key=sport) }}" class="back-button">&larr; Back to League Games</a>
+    </section>
+
+    <main>
+        <section class="create-market-container">
+            <h2>Select a Market for {{ home_team }} vs {{ away_team }}</h2>
+            <form method="POST" action="{{ url_for('create_real_race', sport=sport, event_id=event_id) }}">
+                {% for market in markets %}
+                <label class="market-option">
+                    <input type="radio" name="selected_market" value="{{ market.key }}" required>
+                    <span>{{ market.name }}</span>
+                </label>
+                {% endfor %}
+
+                <button type="submit" class="create-button">Create Market</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

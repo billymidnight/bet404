@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Race Completed</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/donerace.css') }}">
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='images/horselog.png') }}" alt="Parimutuel Logo" class="logo">
+        <h1>Race Results</h1>
+    </header>
+
+    <nav class="ribbon">
+        <a href="{{ url_for('parimutuel') }}">Home</a>
+        <a href="{{ url_for('realmarkets') }}">Real Markets</a>
+        <a href="{{ url_for('races') }}">Races</a>
+        <a href="#">Other Sports</a>
+        <a href="#">Further Reading</a>
+    </nav>
+
+    <main>
+        <h2>Final Standings</h2>
+        <table class="race-results">
+            <thead>
+                <tr>
+                    <th>Position</th>
+                    <th>Horse</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for horse in standings %}
+                <tr>
+                    <td>{{ horse.position }}</td>
+                    <td class="{% if horse.position == 1 %}winner{% endif %}">
+                        {% if horse.position == 1 %}🏆{% endif %}
+                        {{ horse.horsename }}
+                        {% if horse.position == 1 %}🏆{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>Bet History</h2>
+        <table class="bet-history">
+            <thead>
+                <tr>
+                    <th>Bettor</th>
+                    <th>Horse</th>
+                    <th>Bet Amount</th>
+                    <th>Time Placed</th>
+                    <th>Result</th>
+                    <th>Winnings</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bet in bet_history %}
+                <tr class="{% if bet.result == 'Win' %}win{% else %}loss{% endif %}">
+                    <td>{{ bet.bettorname }}</td>
+                    <td>{{ bet.horsename }}</td>
+                    <td>${{ bet.betamount }}</td>
+                    <td>{{ bet.time_placed }}</td>
+                    <td>{{ bet.result }}</td>
+                    <td>${{ bet.winnings }} </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+
+    <footer>
+        {% if winning_bettors %}
+        <p>🎉 Congratulations to {% for bettor in winning_bettors %}{{ bettor }}{% if not loop.last %}, {% endif %}{% endfor %} for winning their bets! 🎉</p>
+        {% else %}
+        <p>No winners this time. Better luck next race!</p>
+        {% endif %}
+    </footer>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ sport_title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/realgame.css') }}">
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='images/horselog.png') }}" alt="Parimutuel Logo" class="logo">
+        <h1>{{ sport_title }}</h1>
+    </header>
+
+    <nav class="ribbon">
+        <a href="{{ url_for('parimutuel') }}">Home</a>
+        <a href="{{ url_for('realmarkets') }}">Real Markets</a>
+        <a href="{{ url_for('races') }}">Races</a>
+        <a href="#">Other Sports</a>
+        <a href="#">Further Reading</a>
+    </nav>
+
+    <main>
+        <section class="popular-sports">
+            <h2>Other Popular Leagues</h2>
+            <div class="sports-list">
+                {% for sport in random_sports %}
+                <a href="{{ url_for('realgame', sport_key=sport['key']) }}">{{ sport.title }}</a>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="games-grid">
+            {% for game in games %}
+            <a href="{{ url_for('createmarket', sport=sport_key, event_id=game.event_id) }}" class="game-box">
+                <h2>{{ game.home_team }} vs {{ game.away_team }}</h2>
+                <p>Start Time: {{ game.commence_time }}</p>
+            </a>
+            {% endfor %}
+        </section>
+    </main>
+</body>
+</html>

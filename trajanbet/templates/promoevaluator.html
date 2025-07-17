@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promo Evaluator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/promoevaluator.css') }}">
+    <script>
+        function showForm(type) {
+            document.getElementById('casino-form').style.display = type === 'casino' ? 'flex' : 'none';
+            document.getElementById('sports-form').style.display = type === 'sports' ? 'flex' : 'none';
+        }
+
+        window.onload = function () {
+            {% if fromsports %}
+                showForm('sports');
+            {% else %}
+                showForm('casino');
+            {% endif %}
+        };
+    </script>
+
+</head>
+<body>
+    <header>
+        <form action="{{ url_for('mainmenu') }}" method="GET">
+            <button class="back-btn">&#8592; Home</button>
+        </form>
+        <h1>Promo Evaluator</h1>
+        <img src="{{ url_for('static', filename='images/trajan.png') }}" alt="Trajan Logo" class="logo">
+    </header>
+
+    <main>
+        <div class="toggle-buttons">
+            <button onclick="showForm('casino')">🎰 Casino</button>
+            <button onclick="showForm('sports')"> Sports⚽</button>
+        </div>
+
+        <!-- Casino Form -->
+        <form id="casino-form" action="{{ url_for('promoevaluator') }}" method="POST" class="promo-form" style="display: flex;">
+            <div class="promo-field">
+                <label>Rebate Amount ($):</label>
+                <input type="number" name="rebate_amount" required value="{{ rebate_amount if rebate_amount is defined else '' }}">
+            </div>
+            <div class="promo-field">
+                <label>Playthrough Requirement (x):</label>
+                <input type="number" step="0.1" name="playthrough" required value="{{ playthrough if playthrough is defined else '' }}">
+            </div>
+            <div class="promo-field">
+                <label>Contribution Factor (%):</label>
+                <input type="number" step="0.1" name="contribution" required value="{{ contribution if contribution is defined else '' }}">
+            </div>
+            <div class="promo-field">
+                <label>Target for Initial ($):</label>
+                <input type="number" name="target" required value="{{ target if target is defined else '' }}">
+            </div>
+            <div class="promo-field">
+                <label>Iterations:</label>
+                <input type="number" name="iterations" required value="{{ iterations if iterations is defined else '' }}">
+            </div>
+            <div class="promo-field">
+                <label>House Edge (%):</label>
+                <input type="number" name="house_edge" required value="{{ house_edge if house_edge is defined else '0.5' }}">
+            </div>
+            <div class="promo-field">
+                <label>Initial Bet Size ($):</label>
+                <input type="number" step="1" name="initial_bet_size" value="{{ initial_bet_size if initial_bet_size is defined else '250' }}">
+            </div>
+            <div class="promo-field">
+                <label>Rebate Early Bet Size ($):</label>
+                <input type="number" step="1" name="early_betsize" value="{{ early_bet_size if early_bet_size is defined else '250' }}">
+            </div>
+            <button type="submit" class="evaluate-btn">Evaluate</button>
+        </form>
+
+        <!-- Sports Form -->
+        <form id="sports-form" action="{{ url_for('sports_evaluator') }}" method="POST" class="promo-form" style="display: none;">
+            <div class="promo-field">
+                <label>Rebate Amount ($):</label>
+                <input type="number" name="sports_rebate" required value="{{ sports_rebate if sports_rebate is defined else '' }}">
+            </div>
+            <div class="promo-field">
+                <label>Odds Initial (American):</label>
+                <input type="number" name="odds_initial" required value="{{ odds_initial if odds_initial is defined else '' }}">
+            </div>
+            <div class="promo-field">
+                <label>Odds Rebate (American):</label>
+                <input type="number" name="odds_rebate" required value="{{ odds_rebate if odds_rebate is defined else '' }}">
+            </div>
+            <div class="promo-field">
+                <label>Average Vig (%):</label>
+                <input type="number" step="0.1" name="vig" required value="{{ vig if vig is defined else '' }}">
+            </div>
+            <div class="promo-field">
+                <label>Days:</label>
+                <input type="number" name="days" value="{{ days if days is defined else '1' }}" required>
+            </div>
+            <div class="promo-field">
+                <label>Iterations:</label>
+                <input type="number" name="iterations" required value="{{ iterations if iterations is defined else '' }}">
+            </div>
+            <button type="submit" class="evaluate-btn">Evaluate Sports</button>
+        </form>
+
+
+        {% if not nosubmission %}
+        <div class="results-box">
+            <h2>Evaluation Results</h2>
+            <div class="results-grid">
+                <p><strong>Mean Ending Balance:</strong> ${{ mean_ending_balance }}</p>
+                <p><strong>Mean Net Profit:</strong> ${{ expected_pandl }}</p>
+                <p><strong>Standard Deviation:</strong> {{ stddev }}</p>
+                <p><strong>Expected Value (%):</strong> {{ ev_percentage }}%</p>
+                {% if fromsports %}
+                    <p><strong>Bust Percentage:</strong> {{ percent_bust }}%</p>
+                {% else %}
+                    <p><strong>Bust Percentage on Initial:</strong> {{ percent_bust }}%</p>
+                {% endif %}
+            </div>
+            <p><strong>Results of Last 10 Iterations:</strong></p>
+            <ul class="results-list">
+                {% for result in last_10_results %}
+                    <li class="{{ 'profit' if result >= 0 else 'loss' }}">
+                        {{ result >= 0 and '+' or '' }}{{ result }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </main>
+</body>
+</html>

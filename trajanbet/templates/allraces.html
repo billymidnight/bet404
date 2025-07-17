@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Races</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/allraces.css') }}">
+    <script>
+        function toggleView(view) {
+            document.getElementById("active-races").style.display = (view === 'active') ? "grid" : "none";
+            document.getElementById("completed-races").style.display = (view === 'completed') ? "grid" : "none";
+        }
+
+        function confirmDelete(raceId) {
+            if (confirm("Are you sure you want to delete this race? This action is irreversible.")) {
+                window.location.href = "{{ url_for('deleterace', race_id=0) }}".replace('0', raceId);
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='images/horselog.png') }}" alt="Parimutuel Logo" class="logo">
+        <h1>All Races</h1>
+    </header>
+
+    <nav class="ribbon">
+        <a href="{{ url_for('parimutuel') }}">Home</a>
+        <a href="{{ url_for('realmarkets') }}">Real Markets</a>
+        <a href="{{ url_for('races') }}">Races</a>
+        <a href="#">Other Sports</a>
+        <a href="#">Further Reading</a>
+    </nav>
+
+    <main>
+        <!-- Toggle Buttons -->
+        <div class="toggle-buttons">
+            <button onclick="toggleView('active')">Active Races</button>
+            <button onclick="toggleView('completed')">Completed Races</button>
+        </div>
+
+        <!-- Active Races -->
+        <div id="active-races" class="race-container">
+            {% for race in active_races %}
+            <div class="race-box">
+                <div class="race-content" onclick="location.href='{{ url_for('onerace', race_id=race.raceid) }}'">
+                    <h3>{{ race.racename }}</h3>
+                    <p><strong>Venue:</strong> {{ race.racevenue }}</p>
+                    <p><strong>Horses:</strong> {{ race.horse_count }}</p>
+                    <p><strong>Prize Pool:</strong> ${{ race.prize_pool }}</p>
+                </div>
+                <button class="delete-button" onclick="confirmDelete('{{ race.raceid }}')">🗑️</button>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Completed Races -->
+        <div id="completed-races" class="race-container" style="display: none;">
+            {% for race in completed_races %}
+            <div class="race-box">
+                <div class="race-content" onclick="location.href='{{ url_for('finishrace', race_id=race.raceid) }}'">
+                    <h3>{{ race.racename }}</h3>
+                    <p><strong>Venue:</strong> {{ race.racevenue }}</p>
+                    <p><strong>Horses:</strong> {{ race.horse_count }}</p>
+                    <p><strong>Prize Pool:</strong> ${{ race.prize_pool }}</p>
+                </div>
+                <button class="delete-button" onclick="confirmDelete('{{ race.raceid }}')">🗑️</button>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html>

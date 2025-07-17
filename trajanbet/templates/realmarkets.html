@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Markets</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/realmarkets.css') }}">
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='images/horselog.png') }}" alt="Parimutuel Logo" class="logo">
+        <h1>Real Markets</h1>
+    </header>
+
+    <nav class="ribbon">
+        <a href="{{ url_for('parimutuel') }}">Home</a>
+        <a href="{{ url_for('realmarkets') }}">Real Markets</a>
+        <a href="{{ url_for('races') }}">Races</a>
+        <a href="#">Other Sports</a>
+        <a href="#">Further Reading</a>
+    </nav>
+
+    <main>
+        <section class="sports-grid">
+            {% for sport in sports %}
+            <a href="{{ url_for('realgame', sport_key=sport['key']) }}" class="sport-box {% if not sport.active %}inactive{% endif %}">
+                <h2>{{ sport.title }}</h2>
+                <p>{{ sport.description }}</p>
+            </a>
+            {% endfor %}
+        </section>
+    </main>
+</body>
+</html>

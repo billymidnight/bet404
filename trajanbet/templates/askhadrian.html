@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ask Hadrian</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/askhadrian.css') }}">
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('mainmenu') }}" class="back-button">← Back to Home</a>
+        <h1>Ask Hadrian 🏛️</h1>
+    </header>
+
+    <main>
+        <div class="chat-window" id="chat-window">
+            <div class="chat-bubble hadrian">
+                <img src="{{ url_for('static', filename='images/hadrian.jpg') }}" class="avatar">
+                <div class="message">This is Trajan's son, Hadrian</div>
+            </div>
+        </div>
+
+        <form id="chat-form">
+            <input type="text" id="user-input" placeholder="Ask Hadrian something..." autocomplete="off" required>
+            <button type="submit">Send</button>
+        </form>
+    </main>
+
+    <script>
+        const form = document.getElementById("chat-form");
+        const chatWindow = document.getElementById("chat-window");
+        const userInput = document.getElementById("user-input");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const message = userInput.value;
+
+            // Append user's message
+            chatWindow.innerHTML += `
+                <div class="chat-bubble user">
+                    <img src="{{ url_for('static', filename='images/averagedude.jpg') }}" class="avatar">
+                    <div class="message">${message}</div>
+                </div>
+            `;
+
+            userInput.value = "";
+
+            const res = await fetch("/gptasker", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message })
+            });
+
+            const data = await res.json();
+
+            const botBubble = document.createElement("div");
+            botBubble.className = "chat-bubble hadrian";
+            botBubble.innerHTML = `
+                <img src="{{ url_for('static', filename='images/hadrian.jpg') }}" class="avatar">
+                <div class="message">${data.reply}</div>
+            `;
+            chatWindow.appendChild(botBubble);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+
+
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+https://api.the-odds-api.com/v4/sports/basketball_nba/odds/?apiKey=47ba23f5165032c1465da8decf6c018a&regions=us,uk&markets=h2h&oddsFormat=american

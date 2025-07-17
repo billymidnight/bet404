@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Bet Conversion</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/freebet.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="{{ url_for('mainmenu') }}" class="back-button">&larr; Back</a>
+            <h1>Free Bet Conversion</h1>
+        </div>
+    </header>
+    <main>
+        <section class="form-section">
+            <h2>Bidirectional fully-covered markets only</h2>
+            <form action="{{ url_for('free_bet_calc') }}" method="POST">
+                <label for="game">Game (required):</label>
+                <input type="text" id="game" name="game" value="{{ game }}" required>
+
+                <label for="line">Line (optional):</label>
+                <input type="text" id="line" name="line" value="{{ line }}">
+
+                <label for="udogodds">Underdog Odds (required):</label>
+                <input type="number" id="udogodds" name="udogodds" value="{{ udogodds }}" required>
+
+                <label for="favsodds">Favorite Odds (required):</label>
+                <input type="number" id="favsodds" name="favsodds" value="{{ favsodds }}" required>
+
+                <label for="betamount">Free Bet (Bonus Amount, required):</label>
+                <input type="number" id="betamount" name="betamount" value="{{ betamount }}" required>
+
+                <label for="freebetbook">Free Bet Book (optional):</label>
+                <input type="text" id="freebetbook" name="freebetbook" value="{{ freebetbook }}">
+
+                <label for="realmoneybook">Real Money Book (optional):</label>
+                <input type="text" id="realmoneybook" name="realmoneybook" value="{{ realmoneybook }}">
+
+                <button type="submit" class="calculate-button">CALCULATE</button>
+            </form>
+        </section>
+        <section class="result-section">
+            <h2>Results</h2>
+            <div class="result-box">
+                <p>Real Money Bet Amount: $<strong>{{ real_money_bet_amount }}</strong></p>
+                <p>Hedge Value: <strong>{{ hedge_value }}</strong></p>
+                <p>Exact Winnings: $<strong>{{ exact_winnings }}</strong></p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

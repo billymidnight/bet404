@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ sport_title }} Odds</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/eventshopping.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="{{ url_for('lineshopping') }}" class="back-button">&larr; Back</a>
+            <h1>{{ sport_title }} - Line Shopping</h1>
+        </div>
+    </header>
+    
+    <!-- Popular Sports Ribbon -->
+    <nav class="popular-sports">
+        <strong>Other Popular Leagues: </strong>
+        {% for sport in random_sports %}
+        <a href="{{ url_for('eventshopping', sport_key=sport['key']) }}">{{ sport.title }}</a>
+        {% endfor %}
+    </nav>
+
+    <main>
+        <div class="content">
+            <div class="odds-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="sticky-header">Game</th>
+                            {% for bookmaker in bookmakers %}
+                            <th class="bookmaker-header" colspan="{{ games[0].possible_outcomes | length }}">{{ bookmaker }}</th>
+                            {% endfor %}
+                        </tr>
+                        <tr class="sticky-header sub-header">
+                            <th></th>
+                            {% for bookmaker in bookmakers %}
+                            {% for outcome in games[0].possible_outcomes %}
+                            <th>{{ outcome }}</th>
+                            {% endfor %}
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for game in games %}
+                        <tr class="game-row">
+                            <td class="game-info" onclick="location.href='{{ url_for('eventev', sport=sport_key, event_id=game.game_id) }}'">
+                                <strong>{{ game.home_team }} vs {{ game.away_team }}</strong><br>
+                                <span class="commence-time">{{ game.commence_time }}</span>
+                            </td>
+                            
+                            {% for bookmaker in bookmakers %}
+                            {% for outcome in game.possible_outcomes %}
+                            <td class="odd-cell">{{ game.odds[bookmaker][outcome] }}</td>
+                            {% endfor %}
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

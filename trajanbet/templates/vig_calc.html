@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vig Calculator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/vig_calc.css') }}">
+</head>
+<body>
+    <header>
+        <form action="{{ url_for('mainmenu') }}" method="GET">
+            <button class="back-btn">&#8592; Home</button>
+        </form>
+        <h1>Vig Calculator</h1>
+        <img src="{{ url_for('static', filename='images/trajan.png') }}" alt="Trajan Logo" class="logo">
+    </header>
+
+    <main>
+        <p class="instruction">Binary fully-covered market (non-overlapping outcomes only):</p>
+        <form action="{{ url_for('vig_calc') }}" method="POST" class="vig-form">
+            <div class="vig-field">
+                <label>Outcome 1 Odds (American):</label>
+                <input type="number" name="odds1" required>
+            </div>
+            <div class="vig-field">
+                <label>Outcome 2 Odds (American):</label>
+                <input type="number" name="odds2" required>
+            </div>
+            <button type="submit" class="calculate-btn">Calculate Vig</button>
+        </form>
+        {% if not noSubmission %}
+        <div class="results-box">
+            <h2>Vig Calculation Results</h2>
+            <p><strong>Entered Odds:</strong> {{ odds1 }}, {{ odds2 }}</p>
+            <p><strong>Calculated Vig (Overround):</strong> {{ vig }}%</p>
+            <p><strong>Vig-Free Odds:</strong></p>
+            <ul class="results-list">
+                <li>Outcome 1: {{ vigfree_odds1 }}</li>
+                <li>Outcome 2: {{ vigfree_odds2 }}</li>
+            </ul>
+        </div>
+        {% endif %}
+
+    </main>
+</body>
+</html>
