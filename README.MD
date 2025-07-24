@@ -232,4 +232,76 @@ flowchart LR
 
 ---
 
-> *“With parimutuel, you’re not betting against the house but with your peers. Understanding pool dynamics is paramount.”*
+# ⚖️ Shin’s Method for Vig Extraction
+
+This document details the **Shin method**—an advanced statistical approach to remove bookmaker vig (overround) from two-outcome markets and recover the “true” odds. It covers:
+
+1. Mathematical derivation  
+2. Step‑by‑step algorithm workflow  
+3. Reference Python implementation  
+4. Comparison to alternative methods (subtraction & power)  
+5. Mermaid diagram of the processing pipeline  
+
+---
+
+## 1. Mathematical Derivation
+
+Given two American odds, convert to decimal odds \(d_1, d_2\) and implied raw probabilities \(p_1, p_2\):
+
+\[
+d = 
+\begin{cases}
+1 + \frac{O}{100}, & O > 0\\[6pt]
+1 - \frac{100}{O}, & O < 0
+\end{cases}
+\quad\Longrightarrow\quad
+p = \frac{1}{d}
+\]
+
+The bookmaker’s two‑way book percentage:
+\[
+B = p_1 + p_2 \;>\; 1
+\]
+
+Shin’s method models insider trading (parameter \(\theta\)) such that:
+\[
+p_i^* \;=\; \frac{B - 1 + \sqrt{(1 - p_i/B)^2 + 4\theta\,p_i\,p_j/B^2}}{2}\quad (i\neq j)
+\]
+and solves for \(\theta\) from:
+\[
+\theta = \frac{B - 1 - p_{\min}}{p_{\max}\,p_{\min}}
+\]
+where \(p_{\max} = \max(p_1,p_2)\), \(p_{\min} = \min(p_1,p_2)\).
+
+The **vig‑free probabilities**:
+\[
+\pi_i = p_i^* \quad\text{normalized:}\quad
+\hat p_i = \frac{\pi_i}{\pi_1 + \pi_2}
+\]
+
+Convert back to American odds:
+\[
+\hat d_i = \frac{1}{\hat p_i}
+\quad\Longrightarrow\quad
+\hat O_i =
+\begin{cases}
+100(\hat d_i - 1), & \hat d_i\ge 2\\[4pt]
+-\frac{100}{\hat d_i - 1}, & 1<\hat d_i<2
+\end{cases}
+\]
+
+---
+
+## 2. Algorithm Workflow
+
+```mermaid
+flowchart TD
+    A[Input: O₁, O₂] --> B[Convert to decimal odds d₁,d₂]
+    B --> C[Compute raw probs p₁=1/d₁, p₂=1/d₂]
+    C --> D[Compute book B=p₁+p₂]
+    D --> E[Solve θ via θ = (B−1−p_min)/(p_max·p_min)]
+    E --> F[Compute Shin‐adjusted π₁,π₂]
+    F --> G[Normalize: ħpᵢ = πᵢ/(π₁+π₂)]
+    G --> H[Convert ħpᵢ → decimal odds ħdᵢ]
+    H --> I[Convert ħdᵢ → American odds ħOᵢ]
+    I --> J[Output: θ, ħp₁, ħp₂, ħO₁, ħO₂]
