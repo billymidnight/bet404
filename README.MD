@@ -1,13 +1,13 @@
 # 🏛️ Trajan Betting Central (TBC)
 
-**Trajan Betting Central** is a Flask-powered sports trading and analytics platform that brings together professional-grade tools for bettors, traders, and line hunters. It includes EV calculators, arbitrage detection, promo evaluators, vig removal tools, and an LLM-powered chatbot assistant named Hadrian.
+**Trajan Betting Central** is a Flask‑powered sports trading and analytics platform that brings together professional‑grade tools for bettors, traders, and line hunters. It includes EV calculators, arbitrage detection, promo evaluators, vig‑removal tools, and an LLM‑powered chatbot assistant named Hadrian.
 
 ---
 
 ## ⚙️ Technologies Used
 
-* **Backend:** Python 3, Flask
-* **Database:** SQLite3
+* **Backend:** Python 3, Flask
+* **Database:** SQLite 3
 * **Frontend:** HTML/CSS/JS, Jinja2 templating
 * **External APIs:** OddsAPI (raw JSON odds from bookmakers)
 
@@ -15,7 +15,7 @@
 
 ## 📁 Directory Structure (Key Files)
 
-```
+```text
 project_root/
 ├── static/                # CSS, JS, images
 ├── templates/             # HTML templates
@@ -27,7 +27,7 @@ project_root/
 ├── arbpopulator.py        # Arbitrage finder logic
 ├── eventshopping.py       # Line shopping from OddsAPI
 ├── hadrian.py             # GPT-based assistant logic
-├── database.db            # SQLite DB
+├── database.db            # SQLite database file
 └── README.md              # This file
 ```
 
@@ -38,22 +38,22 @@ project_root/
 ### 📊 EV Calculator (`/ev_populate/`)
 
 * Parses `allodds.txt` for H2H odds
-* Converts American odds to implied probs
-* Normalizes by total book to get **vig-free true odds**
+* Converts American odds to implied probabilities
+* Normalizes by total book to get **vig‑free true odds**
 * Averages across books to get true line
 * Calculates EV for each bookmaker's odds:
 
-  ```
+  ```text
   EV = (true_prob * payout) + ((1 - true_prob) * -100)
   ```
-* Stores all bets in `evbets` table
+* Stores all bets in the `evbets` table
 
 ---
 
 ### 📈 Vig Calculator (`/vig_calc/`)
 
-* User inputs 2 odds (American)
-* Converts to implied probs
+* User inputs two odds (American)
+* Converts to implied probabilities
 * Computes vig (overround)
 * Normalizes to remove vig
 * Returns true odds and probabilities
@@ -67,10 +67,10 @@ project_root/
 * Looks for opposite sides with +EV arbitrage
 * Computes margin:
 
-  ```
+  ```text
   Margin = (Payout - Stake) / Stake
   ```
-* Stores profitable arbs in `arb_lines`
+* Stores profitable arbitrages in `arb_lines`
 
 ---
 
@@ -95,46 +95,46 @@ project_root/
 #### Casino Mode (`/promoevaluator`)
 
 * Monte Carlo simulates using `rebate_amount`, `playthrough`, `house_edge`, etc.
-* Tracks bust %, final bankroll, EV%, stddev
+* Tracks bust %, final bankroll, EV %, stddev
 
 #### Sports Mode (`/sports_evaluator`)
 
-* Simulates multi-day betting with rebates
+* Simulates multi‑day betting with rebates
 * Uses adjusted odds with vig removed
-* Displays win/loss chart from last 10 sims
+* Displays win/loss chart from last 10 simulations
 
 ---
 
 ### 🧠 Hadrian: LLM Assistant (`/gptasker`)
 
-GPT-4o-powered chatbot that intelligently routes queries to:
+GPT‑4o‑powered chatbot that intelligently routes queries to:
 
 * `vig_calc()`
 * `promoevaluator()`
 * `sports_evaluator()`
-* SQL-backed table lookups: `arb_lines`, `linefinder_table`, etc.
+* SQL‑backed table lookups: `arb_lines`, `linefinder_table`, etc.
 
-#### Prompt Flow:
+#### Prompt Flow
 
 ```mermaid
-graph TD
-    A[User Query] --> B[Prompt Router]
-    B --> C{Match Found?}
-    C -->|Yes| D[Route to Function or Endpoint]
-    C -->|No| E[RAG Embedding + SQLite Lookups]
-    E --> F[Prompt Reconstruction]
-    F --> G[LLM Response]
+flowchart TD
+  A[User Query] --> B[Prompt Router]
+  B --> C{Match Found?}
+  C -->|Yes| D[Route to Function or Endpoint]
+  C -->|No| E[RAG Embedding + SQLite Lookups]
+  E --> F[Prompt Reconstruction]
+  F --> G[LLM Response]
 ```
 
-Example prompts:
+**Example prompts:**
 
 * "What’s the vig for +130 and -150?"
-* "Evaluate \$50 casino promo with 10x playthrough and 10% contrib."
+* "Evaluate \$50 casino promo with 10× playthrough and 10% contrib."
 * "Any arbitrages right now between DraftKings and BetMGM?"
 
 ---
 
-## 🔧 Helper Functions (helpers.py)
+## 🔧 Helper Functions (`helpers.py`)
 
 ```python
 def convert_odds_to_probability(odds):
@@ -143,7 +143,7 @@ def convert_odds_to_probability(odds):
     else:
         return -odds / (-odds + 100)
 
-def probability_to_american(prob):
+ def probability_to_american(prob):
     if prob >= 0.5:
         return int(-100 * prob / (1 - prob))
     else:
@@ -158,8 +158,8 @@ def probability_to_american(prob):
 | ---------------------------- | -------- | -------------------------- |
 | `/ev_populate/`              | GET      | Populate EV table          |
 | `/vig_calc/`                 | GET/POST | Vig calculator UI          |
-| `/arbpopulator/`             | GET      | Populate arb\_lines table  |
-| `/eventshopping/<sport_key>` | GET      | Fetch odds + line shop UI  |
+| `/arbpopulator/`             | GET      | Populate `arb_lines` table |
+| `/eventshopping/<sport_key>` | GET      | Fetch odds + shop UI       |
 | `/promoevaluator`            | GET/POST | Run casino promo sim       |
 | `/sports_evaluator`          | POST     | Run sports rebate sim      |
 | `/gptasker`                  | POST     | Hadrian assistant endpoint |
@@ -170,7 +170,7 @@ def probability_to_american(prob):
 
 * No user input touches raw SQL directly
 * All Flask forms use validated input parsing
-* Hadrian's LLM execution is constrained to safe commands/functions only
+* Hadrian's LLM execution is constrained to safe functions only
 
 ---
 
@@ -190,118 +190,85 @@ The Parimutuel Betting Calculator models payout pools where bettors share a comm
 **Workflow:**
 
 1. **Input:** Odds or implied probabilities for each outcome, total pool size, and house commission (vig).
-2. **Convert Odds to Probabilities:** Use `convert_odds_to_probability` for each American line or direct probability input.
+2. **Convert Odds to Probabilities:** Use `convert_odds_to_probability` for American lines or direct probability inputs.
 3. **Adjust for Commission:** Subtract commission fraction C from total pool:
 
-   ```math
-   P_{net} = P_{total} \times (1 - C)
+   ```text
+   P_net = P_total * (1 - C)
    ```
-4. **Calculate Payouts:** For each outcome *i* with implied prob *p\_i*:
+4. **Calculate Payouts:** For each outcome i with implied prob p\_i:
 
-   * If actual pool data *N\_i* is available,
+   * If actual pool data N\_i is available:
 
-     ```math
-     Payout_i = \frac{P_{net}}{N_i}
+     ```text
+     Payout_i = P_net / N_i
      ```
    * If only probabilities, normalize:
 
-     ```math
-     \tilde{p}_i = \frac{p_i}{\sum_j p_j} \quad,
-     M_i = \frac{1}{\tilde{p}_i}
+     ```text
+     p_i_tilde = p_i / sum_j p_j
+     M_i = 1 / p_i_tilde
      ```
 
-### Mermaid Flow:
+### Mermaid Flow
 
 ```mermaid
 flowchart LR
-    A[Input odds/probs & pool size] --> B[Compute implied probabilities]
-    B --> C[Apply commission]
-    C --> D[Normalize probabilities]
-    D --> E[Compute payout multipliers]
-    E --> F[Display results]
+  A[Input odds/probs & pool size] -->|1| B[Compute implied probabilities]
+  B -->|2| C[Apply commission]
+  C -->|3| D[Normalize probabilities]
+  D -->|4| E[Compute payout multipliers]
+  E -->|5| F[Display results]
 ```
 
-### Vig Extraction Methods Comparison
-
-| Method          | Description                                      | Formula                                                                      |
-| --------------- | ------------------------------------------------ | ---------------------------------------------------------------------------- |
-| **Pro-Rata**    | Scale by total book                              | p\_i^\* = p\_i / (\sum\_j p\_j)                                              |
-| **Subtraction** | Subtract equal share of vig before normalization | p\_i^\* = (p\_i - V/n) / \sum\_k(p\_k - V/n)                                 |
-| **Power**       | Apply exponent α to adjust skew                  | p\_i^\* = p\_i^α / \sum\_j(p\_j^α), choose α such that \sum p\_i^\* = 1      |
-| **Shin**        | Bayesian Shin method using insider model         | p\_i^\* = (√(p\_i² + 4λp\_i(1-p\_i)) - p\_i)/(2λ), λ solves \sum p\_i^\* = 1 |
-
 ---
 
-# ⚖️ Shin’s Method for Vig Extraction
+## ⚖️ Shin’s Method for Vig Extraction
 
-This document details the **Shin method**—an advanced statistical approach to remove bookmaker vig (overround) from two-outcome markets and recover the “true” odds. It covers:
+This section details the **Shin method**—an advanced statistical approach to remove bookmaker vig (overround) from two‑outcome markets and recover the “true” odds.
 
-1. Mathematical derivation  
-2. Step‑by‑step algorithm workflow  
-3. Reference Python implementation  
-4. Comparison to alternative methods (subtraction & power)  
-5. Mermaid diagram of the processing pipeline  
+### 1. Mathematical Derivation
 
----
+Given two American odds, convert to decimal odds d1, d2 and implied raw probabilities p1, p2:
 
-## 1. Mathematical Derivation
-
-Given two American odds, convert to decimal odds \(d_1, d_2\) and implied raw probabilities \(p_1, p_2\):
-
-\[
-d = 
-\begin{cases}
-1 + \frac{O}{100}, & O > 0\\[6pt]
-1 - \frac{100}{O}, & O < 0
-\end{cases}
-\quad\Longrightarrow\quad
-p = \frac{1}{d}
-\]
+```text
+d =
+  if O>0: 1 + O/100
+  else: 1 - 100/O
+p = 1/d
+```
 
 The bookmaker’s two‑way book percentage:
-\[
-B = p_1 + p_2 \;>\; 1
-\]
 
-Shin’s method models insider trading (parameter \(\theta\)) such that:
-\[
-p_i^* \;=\; \frac{B - 1 + \sqrt{(1 - p_i/B)^2 + 4\theta\,p_i\,p_j/B^2}}{2}\quad (i\neq j)
-\]
-and solves for \(\theta\) from:
-\[
-\theta = \frac{B - 1 - p_{\min}}{p_{\max}\,p_{\min}}
-\]
-where \(p_{\max} = \max(p_1,p_2)\), \(p_{\min} = \min(p_1,p_2)\).
+```text
+B = p1 + p2  # should be >1
+```
 
-The **vig‑free probabilities**:
-\[
-\pi_i = p_i^* \quad\text{normalized:}\quad
-\hat p_i = \frac{\pi_i}{\pi_1 + \pi_2}
-\]
+Shin’s method introduces insider parameter θ:
 
-Convert back to American odds:
-\[
-\hat d_i = \frac{1}{\hat p_i}
-\quad\Longrightarrow\quad
-\hat O_i =
-\begin{cases}
-100(\hat d_i - 1), & \hat d_i\ge 2\\[4pt]
--\frac{100}{\hat d_i - 1}, & 1<\hat d_i<2
-\end{cases}
-\]
+```text
+p_i_star = (B - 1 + sqrt((1 - p_i/B)^2 + 4θ p_i p_j/B^2)) / 2
+θ = (B - 1 - p_min)/(p_max p_min)
+```
 
----
+Normalize and convert back:
 
-## 2. Algorithm Workflow
+```text
+hat_p_i = p_i_star / (p_1_star + p_2_star)
+hat_d_i = 1/hat_p_i
+hat_O_i = (hat_d_i - 1)*100 if hat_d_i>=2 else -100/(hat_d_i - 1)
+```
+
+### 2. Algorithm Workflow
 
 ```mermaid
 flowchart TD
-    A[Input: O₁, O₂] --> B[Convert to decimal odds d₁,d₂]
-    B --> C[Compute raw probs p₁=1/d₁, p₂=1/d₂]
-    C --> D[Compute book B=p₁+p₂]
-    D --> E[Solve θ via θ = (B−1−p_min)/(p_max·p_min)]
-    E --> F[Compute Shin‐adjusted π₁,π₂]
-    F --> G[Normalize: ħpᵢ = πᵢ/(π₁+π₂)]
-    G --> H[Convert ħpᵢ → decimal odds ħdᵢ]
-    H --> I[Convert ħdᵢ → American odds ħOᵢ]
-    I --> J[Output: θ, ħp₁, ħp₂, ħO₁, ħO₂]
+  A[Input: O1, O2] --> B[Convert to d1,d2]
+  B --> C[Compute p1=1/d1, p2=1/d2]
+  C --> D[Compute B=p1+p2]
+  D --> E[Compute θ=(B−1−p_min)/(p_max·p_min)]
+  E --> F[Compute p_i_star]
+  F --> G[Normalize hat_p_i]
+  G --> H[Convert to hat_O_i]
+  H --> I[Output: θ, hat_p_i, hat_O_i]
+```
