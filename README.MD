@@ -183,3 +183,73 @@ def probability_to_american(prob):
 
 ---
 
+
+## 🏇 Parimutuel Betting Engine (Advanced)
+
+
+
+```mermaid
+flowchart TD
+  subgraph Pooling & Clearing
+    A[Ticket Sales] --> B[Total Pool (P)]
+    B --> C[Total Win Liabilities: \(L = \sum_i payout_i\)]
+    B --> V[House Vig (V = P − L)]
+    C --> D[Net Pool for Winners (W = P − V)]
+  end
+
+  subgraph Odds Calculation
+    D --> E{Compute Market Probabilities}
+    E -->|Without Vig| F[Raw Odds: \(p_i = \tfrac{sales_i}{P}\)]
+    E -->|With Vig| G[Impacted Odds: \(\tilde p_i = \tfrac{p_i}{1 - V/P}\)]
+  end
+
+  subgraph Vig Extraction Methods
+    G --> H[Standard Margin: \(V = μP\)]
+    G --> I[Shin’s Method]
+    G --> J[Power’s Method]
+  end
+
+  subgraph Settlement
+    H & I & J --> K[Calculate Payouts: \(W \times \tilde p_i\)]
+    K --> L[Distribute Funds]
+  end
+
+  style A fill:#fdebd0,stroke:#ba4a00,stroke-width:1px
+  style B fill:#d6eaf8,stroke:#1b4f72,stroke-width:1px
+  style V fill:#fadbd8,stroke:#6e2c00,stroke-width:1px
+  style I fill:#d1f2eb,stroke:#0e6251
+  style J fill:#f5b7b1,stroke:#641e16
+```
+
+### Vig Extraction Formulas
+
+1. **Standard Margin** (flat percentage $μ$):
+
+   $V = μ \times P$
+
+2. **Shin’s Method** (accounts for insider trading):
+
+   Let raw market probabilities be $p_i$, and Shin’s ratio $z$ satisfy:
+
+   $$
+     c = \sum_i \frac{p_i}{q_i} - 1, \quad z = \frac{\sqrt{c^2 + 4c} - c}{2},
+   $$
+
+   then the extracted vig is:
+
+   $$
+     V = P \left(1 - \frac{1}{\sum_i \frac{p_i}{1 - z}}\right).
+   $$
+
+3. **Power’s Method** (risk‑sensitive take, exponent $θ>0$):
+
+   $$
+     V(θ) = P \left[ 1 - \frac{\sum_i p_i^{1+θ}}{\bigl(\sum_i p_i\bigr)^{1+θ}} \right].
+   $$
+
+* $p_i = sales_i / P$ are the raw pool fractions.
+* In Shin’s, $q_i$ are implied “true” probabilities solved via maximum likelihood.
+* In Power’s, $θ$ adjusts how aggressively the house margins the long‑shots vs favorites.
+
+---
+
