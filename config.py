@@ -2,11 +2,11 @@
 
 import pathlib
 import os
-from dotenv import load_dotenv
+from dotenv import load_dotenv  
 
 
 
-PROJECT_ROOT = pathlib.Path(__file__).resolve().parent
+PROJECT_ROOT = pathlib.Path(__file__).resolve().parent  
 load_dotenv(dotenv_path=PROJECT_ROOT / ".env")
 
 ODDS_API_KEY = os.getenv("ODDS_API_KEY")
