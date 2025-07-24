@@ -4,7 +4,7 @@
 
 ---
 
-## Technologies Used
+## ⚙️ Technologies Used
 
 * **Backend:** Python 3, Flask
 * **Database:** SQLite3
@@ -13,7 +13,7 @@
 
 ---
 
-## Directory Structure (Key Files)
+## 📁 Directory Structure (Key Files)
 
 ```
 project_root/
@@ -33,9 +33,9 @@ project_root/
 
 ---
 
-## Core Features
+## 🧠 Core Features
 
-### EV Calculator (`/ev_populate/`)
+### 📊 EV Calculator (`/ev_populate/`)
 
 * Parses `allodds.txt` for H2H odds
 * Converts American odds to implied probs
@@ -50,7 +50,7 @@ project_root/
 
 ---
 
-### Vig Calculator (`/vig_calc/`)
+### 📈 Vig Calculator (`/vig_calc/`)
 
 * User inputs 2 odds (American)
 * Converts to implied probs
@@ -60,7 +60,7 @@ project_root/
 
 ---
 
-### Arbitrage Finder (`/arbpopulator/`)
+### 📊 Arbitrage Finder (`/arbpopulator/`)
 
 * Reads odds dump from `allodds.txt`
 * For each matchup, compares all book pairs
@@ -74,7 +74,7 @@ project_root/
 
 ---
 
-### Event Shopping Tool (`/eventshopping/<sport_key>`)
+### 📅 Event Shopping Tool (`/eventshopping/<sport_key>`)
 
 * Fetches live odds from OddsAPI
 * Populates:
@@ -90,7 +90,7 @@ project_root/
 
 ---
 
-### Promo Evaluator
+### 🎟️ Promo Evaluator
 
 #### Casino Mode (`/promoevaluator`)
 
@@ -105,7 +105,7 @@ project_root/
 
 ---
 
-### Hadrian: LLM Assistant (`/gptasker`)
+### 🧠 Hadrian: LLM Assistant (`/gptasker`)
 
 GPT-4o-powered chatbot that intelligently routes queries to:
 
@@ -134,7 +134,7 @@ Example prompts:
 
 ---
 
-## Helper Functions (helpers.py)
+## 🔧 Helper Functions (helpers.py)
 
 ```python
 def convert_odds_to_probability(odds):
@@ -152,7 +152,7 @@ def probability_to_american(prob):
 
 ---
 
-## Integrations & Routes
+## 🤝 Integrations & Routes
 
 | Route                        | Method   | Purpose                    |
 | ---------------------------- | -------- | -------------------------- |
@@ -166,7 +166,7 @@ def probability_to_american(prob):
 
 ---
 
-## Security Notes
+## 🔐 Security Notes
 
 * No user input touches raw SQL directly
 * All Flask forms use validated input parsing
@@ -174,7 +174,7 @@ def probability_to_american(prob):
 
 ---
 
-## Future Plans
+## 🚀 Future Plans
 
 * Add player prop scanner & middle finder
 * Add CLV tracker with graph
@@ -183,73 +183,53 @@ def probability_to_american(prob):
 
 ---
 
+## 🎲 Parimutuel Betting Calculator
 
-## 🏇 Parimutuel Betting Engine (Advanced)
+The Parimutuel Betting Calculator models payout pools where bettors share a common pool minus the house take. It supports multiple outcomes and variable commission rates.
 
+**Workflow:**
 
+1. **Input:** Odds or implied probabilities for each outcome, total pool size, and house commission (vig).
+2. **Convert Odds to Probabilities:** Use `convert_odds_to_probability` for each American line or direct probability input.
+3. **Adjust for Commission:** Subtract commission fraction C from total pool:
+
+   ```math
+   P_{net} = P_{total} \times (1 - C)
+   ```
+4. **Calculate Payouts:** For each outcome *i* with implied prob *p\_i*:
+
+   * If actual pool data *N\_i* is available,
+
+     ```math
+     Payout_i = \frac{P_{net}}{N_i}
+     ```
+   * If only probabilities, normalize:
+
+     ```math
+     \tilde{p}_i = \frac{p_i}{\sum_j p_j} \quad,
+     M_i = \frac{1}{\tilde{p}_i}
+     ```
+
+### Mermaid Flow:
 
 ```mermaid
-flowchart TD
-  subgraph Pooling & Clearing
-    A[Ticket Sales] --> B[Total Pool (P)]
-    B --> C[Total Win Liabilities: \(L = \sum_i payout_i\)]
-    B --> V[House Vig (V = P − L)]
-    C --> D[Net Pool for Winners (W = P − V)]
-  end
-
-  subgraph Odds Calculation
-    D --> E{Compute Market Probabilities}
-    E -->|Without Vig| F[Raw Odds: \(p_i = \tfrac{sales_i}{P}\)]
-    E -->|With Vig| G[Impacted Odds: \(\tilde p_i = \tfrac{p_i}{1 - V/P}\)]
-  end
-
-  subgraph Vig Extraction Methods
-    G --> H[Standard Margin: \(V = μP\)]
-    G --> I[Shin’s Method]
-    G --> J[Power’s Method]
-  end
-
-  subgraph Settlement
-    H & I & J --> K[Calculate Payouts: \(W \times \tilde p_i\)]
-    K --> L[Distribute Funds]
-  end
-
-  style A fill:#fdebd0,stroke:#ba4a00,stroke-width:1px
-  style B fill:#d6eaf8,stroke:#1b4f72,stroke-width:1px
-  style V fill:#fadbd8,stroke:#6e2c00,stroke-width:1px
-  style I fill:#d1f2eb,stroke:#0e6251
-  style J fill:#f5b7b1,stroke:#641e16
+flowchart LR
+    A[Input odds/probs & pool size] --> B[Compute implied probabilities]
+    B --> C[Apply commission]
+    C --> D[Normalize probabilities]
+    D --> E[Compute payout multipliers]
+    E --> F[Display results]
 ```
 
-### Vig Extraction Formulas
+### Vig Extraction Methods Comparison
 
-1. **Standard Margin** (flat percentage $μ$):
-
-   $V = μ \times P$
-
-2. **Shin’s Method** (accounts for insider trading):
-
-   Let raw market probabilities be $p_i$, and Shin’s ratio $z$ satisfy:
-
-   $$
-     c = \sum_i \frac{p_i}{q_i} - 1, \quad z = \frac{\sqrt{c^2 + 4c} - c}{2},
-   $$
-
-   then the extracted vig is:
-
-   $$
-     V = P \left(1 - \frac{1}{\sum_i \frac{p_i}{1 - z}}\right).
-   $$
-
-3. **Power’s Method** (risk‑sensitive take, exponent $θ>0$):
-
-   $$
-     V(θ) = P \left[ 1 - \frac{\sum_i p_i^{1+θ}}{\bigl(\sum_i p_i\bigr)^{1+θ}} \right].
-   $$
-
-* $p_i = sales_i / P$ are the raw pool fractions.
-* In Shin’s, $q_i$ are implied “true” probabilities solved via maximum likelihood.
-* In Power’s, $θ$ adjusts how aggressively the house margins the long‑shots vs favorites.
+| Method          | Description                                      | Formula                                                                      |
+| --------------- | ------------------------------------------------ | ---------------------------------------------------------------------------- |
+| **Pro-Rata**    | Scale by total book                              | p\_i^\* = p\_i / (\sum\_j p\_j)                                              |
+| **Subtraction** | Subtract equal share of vig before normalization | p\_i^\* = (p\_i - V/n) / \sum\_k(p\_k - V/n)                                 |
+| **Power**       | Apply exponent α to adjust skew                  | p\_i^\* = p\_i^α / \sum\_j(p\_j^α), choose α such that \sum p\_i^\* = 1      |
+| **Shin**        | Bayesian Shin method using insider model         | p\_i^\* = (√(p\_i² + 4λp\_i(1-p\_i)) - p\_i)/(2λ), λ solves \sum p\_i^\* = 1 |
 
 ---
 
+> *“With parimutuel, you’re not betting against the house but with your peers. Understanding pool dynamics is paramount.”*
